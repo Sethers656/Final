@@ -1,4 +1,4 @@
-<!doctype html>
+
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
@@ -157,7 +157,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             save the username to the session */
                             session_start();
                             $_SESSION['username'] = $username;      
-                            header("location: demo-video-background-welcome.php");
+                            echo "<script> location.href='demo-video-background-welcome.php'; </script>";
                         } else{
                             // Display an error message if password is not valid
                             $password_err = 'The password you entered was not valid.';
@@ -180,7 +180,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     mysqli_close($link);
 }
 ?>
- 
 
 <html lang="en">
 <head>
@@ -188,15 +187,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <title>Login</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
     <style type="text/css">
-        body{ font: 14px sans-serif; }
+        body{ font: 14px sans-serif;   color: white; }
         .wrapper{ width: 350px; padding: 20px; }
+        color: white;
     </style>
 </head>
 <body>
     <div class="wrapper">
         <h2>Login</h2>
         <p>Please fill in your credentials to login.</p>
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+        <center><form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+          
+          
             <div class="form-group <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
                 <label>Username:<sup>*</sup></label>
                 <input type="text" name="username"class="form-control" value="<?php echo $username; ?>">
@@ -212,7 +214,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             </div>
             <p>Don't have an account? <a href="demo-video-background-register.php
             ">Sign up now</a>.</p>
-        </form>
+        </form></center>
     </div>    
 </body>
 </html>
@@ -232,3 +234,5 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
    <script src="js/jquery-1.10.2.js" type="text/javascript"></script>
 	<script src="js/bootstrap.min.js" type="text/javascript"></script>
 </html>
+
+ 

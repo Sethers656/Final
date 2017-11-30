@@ -185,7 +185,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
                 // Redirect to login page
-                header("location: login.php");
+                header('location: localhost/Login/Final/demo-video-background-login.php');
             } else{
                 echo "Something went wrong. Please try again later.";
             }
@@ -207,7 +207,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <title>Sign Up</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
     <style type="text/css">
-        body{ font: 14px sans-serif; }
+        body{ font: 14px sans-serif; color: white;}
         .wrapper{ width: 350px; padding: 20px; }
     </style>
 </head>

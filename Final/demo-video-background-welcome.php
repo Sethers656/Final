@@ -111,7 +111,7 @@ session_start();
  
 // If session variable is not set it will redirect to login page
 if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
-  header("location: demo-video-background-login.php");
+  echo "<script> location.href='demo-video-background-login.php'; </script>";
   exit;
 }
 ?>
@@ -123,14 +123,14 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
     <title>Welcome</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
     <style type="text/css">
-        body{ font: 14px sans-serif; text-align: center; }
+        body{ font: 14px sans-serif; text-align: center; color:white }
     </style>
 </head>
 <body>
     <div class="page-header">
         <h1>Hi, <b><?php echo $_SESSION['username']; ?></b>. Welcome to our site.</h1>
     </div>
-    <p><a href="logout.php" class="btn btn-danger">Sign Out of Your Account</a></p>
+    <p><a href="demo-video-background-logout.php" class="btn btn-danger">Sign Out of Your Account</a></p>
 </body>
 </html>
 
