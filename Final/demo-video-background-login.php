@@ -1,4 +1,78 @@
-
+ <?php
+// Include config file
+require_once 'config.php';
+ 
+// Define variables and initialize with empty values
+$username = $password = "";
+$username_err = $password_err = "";
+ 
+// Processing form data when form is submitted
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+ 
+    // Check if username is empty
+    if(empty(trim($_POST["username"]))){
+        $username_err = 'Please enter username.';
+    } else{
+        $username = trim($_POST["username"]);
+    }
+    
+    // Check if password is empty
+    if(empty(trim($_POST['password']))){
+        $password_err = 'Please enter your password.';
+    } else{
+        $password = trim($_POST['password']);
+    }
+    
+    // Validate credentials
+    if(empty($username_err) && empty($password_err)){
+        // Prepare a select statement
+        $sql = "SELECT username, password FROM users WHERE username = ?";
+        
+        if($stmt = mysqli_prepare($link, $sql)){
+            // Bind variables to the prepared statement as parameters
+            mysqli_stmt_bind_param($stmt, "s", $param_username);
+            
+            // Set parameters
+            $param_username = $username;
+            
+            // Attempt to execute the prepared statement
+            if(mysqli_stmt_execute($stmt)){
+                // Store result
+                mysqli_stmt_store_result($stmt);
+                
+                // Check if username exists, if yes then verify password
+                if(mysqli_stmt_num_rows($stmt) == 1){                    
+                    // Bind result variables
+                    mysqli_stmt_bind_result($stmt, $username, $hashed_password);
+                    if(mysqli_stmt_fetch($stmt)){
+                        if(password_verify($password, $hashed_password)){
+                            /* Password is correct, so start a new session and
+                            save the username to the session */
+                            session_start();
+                            $_SESSION['username'] = $username;      
+                            header("location: demo-video-background-welcome.php");
+                        } else{
+                            // Display an error message if password is not valid
+                            $password_err = 'The password you entered was not valid.';
+                        }
+                    }
+                } else{
+                    // Display an error message if username doesn't exist
+                    $username_err = 'No account found with that username.';
+                }
+            } else{
+                echo "Oops! Something went wrong. Please try again later.";
+            }
+        }
+        
+        // Close statement
+        mysqli_stmt_close($stmt);
+    }
+    
+    // Close connection
+    mysqli_close($link);
+}
+?>
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
@@ -19,7 +93,10 @@
     <link href='http://fonts.googleapis.com/css?family=Grand+Hotel' rel='stylesheet' type='text/css'>
 
 </head>
-
+ <style type="text/css">
+        body{ font: 14px sans-serif; color:white; }
+        .wrapper{ width: 350px; padding: 20px; }
+    </style>
 <body>
 <nav class="navbar navbar-transparent navbar-fixed-top" role="navigation">
   <div class="container">
@@ -105,100 +182,16 @@
         <div class="content">
             <h4 class="motto">Really Awesome Site you want to log in to.</h4>
             <div class="subscribe">
-              <?php
-// Include config file
-require_once 'config.php';
+             
  
-// Define variables and initialize with empty values
-$username = $password = "";
-$username_err = $password_err = "";
- 
-// Processing form data when form is submitted
-if($_SERVER["REQUEST_METHOD"] == "POST"){
- 
-    // Check if username is empty
-    if(empty(trim($_POST["username"]))){
-        $username_err = 'Please enter username.';
-    } else{
-        $username = trim($_POST["username"]);
-    }
-    
-    // Check if password is empty
-    if(empty(trim($_POST['password']))){
-        $password_err = 'Please enter your password.';
-    } else{
-        $password = trim($_POST['password']);
-    }
-    
-    // Validate credentials
-    if(empty($username_err) && empty($password_err)){
-        // Prepare a select statement
-        $sql = "SELECT username, password FROM users WHERE username = ?";
-        
-        if($stmt = mysqli_prepare($link, $sql)){
-            // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "s", $param_username);
-            
-            // Set parameters
-            $param_username = $username;
-            
-            // Attempt to execute the prepared statement
-            if(mysqli_stmt_execute($stmt)){
-                // Store result
-                mysqli_stmt_store_result($stmt);
-                
-                // Check if username exists, if yes then verify password
-                if(mysqli_stmt_num_rows($stmt) == 1){                    
-                    // Bind result variables
-                    mysqli_stmt_bind_result($stmt, $username, $hashed_password);
-                    if(mysqli_stmt_fetch($stmt)){
-                        if(password_verify($password, $hashed_password)){
-                            /* Password is correct, so start a new session and
-                            save the username to the session */
-                            session_start();
-                            $_SESSION['username'] = $username;      
-                            echo "<script> location.href='demo-video-background-welcome.php'; </script>";
-                        } else{
-                            // Display an error message if password is not valid
-                            $password_err = 'The password you entered was not valid.';
-                        }
-                    }
-                } else{
-                    // Display an error message if username doesn't exist
-                    $username_err = 'No account found with that username.';
-                }
-            } else{
-                echo "Oops! Something went wrong. Please try again later.";
-            }
-        }
-        
-        // Close statement
-        mysqli_stmt_close($stmt);
-    }
-    
-    // Close connection
-    mysqli_close($link);
-}
-?>
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
-    <style type="text/css">
-        body{ font: 14px sans-serif;   color: white; }
-        .wrapper{ width: 350px; padding: 20px; }
-        color: white;
-    </style>
-</head>
-<body>
-    <div class="wrapper">
+
+
+
+    <center><div class="wrapper">
         <h2>Login</h2>
         <p>Please fill in your credentials to login.</p>
-        <center><form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-          
-          
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <div class="form-group <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
                 <label>Username:<sup>*</sup></label>
                 <input type="text" name="username"class="form-control" value="<?php echo $username; ?>">
@@ -210,18 +203,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <span class="help-block"><?php echo $password_err; ?></span>
             </div>
             <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Submit">
+                <input type="submit" class="btn btn-danger" value="Submit">
             </div>
-            <p>Don't have an account? <a href="demo-video-background-register.php
-            ">Sign up now</a>.</p>
-        </form></center>
-    </div>    
-</body>
-</html>
-                <div class="row">
-             
-                </div>
-            </div>
+            <p>Don't have an account? <red><a href="demo-video-background-register.php">Sign up now</red></a>.</p>
+        </form>
+    </div></center> 
+
+
+              
         </div>
     </div>
     <div class="footer">
@@ -229,10 +218,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
              Made with <i class="fa fa-heart heart"></i> by <a href="http://www.creative-tim.com">Group Name</a>. CIS491.01</a>
       </div>
     </div>
- </div>
+ 
 </body>
    <script src="js/jquery-1.10.2.js" type="text/javascript"></script>
 	<script src="js/bootstrap.min.js" type="text/javascript"></script>
 </html>
-
- 

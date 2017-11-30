@@ -1,6 +1,20 @@
-<!doctype html>
+<?php
+// Initialize the session
+session_start();
+ 
+// If session variable is not set it will redirect to login page
+if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
+  header("location: login.php");
+  exit;
+}
+?>
+
 <html lang="en">
 <head>
+     <style type="text/css">
+        body{ font: 14px sans-serif; color:white; }
+        .wrapper{ width: 350px; padding: 20px; }
+    </style>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<link rel="apple-touch-icon" sizes="76x76" href="images/apple-icon.png">
@@ -19,7 +33,10 @@
     <link href='http://fonts.googleapis.com/css?family=Grand+Hotel' rel='stylesheet' type='text/css'>
 
 </head>
-
+  <style type="text/css">
+        body{ font: 14px sans-serif; color:white; }
+        .wrapper{ width: 350px; padding: 20px; }
+    </style>
 <body>
 <nav class="navbar navbar-transparent navbar-fixed-top" role="navigation">
   <div class="container">
@@ -105,34 +122,21 @@
         <div class="content">
             <h4 class="motto">Really Awesome Site you want to log in to.</h4>
             <div class="subscribe">
-          <?php
-// Initialize the session
-session_start();
- 
-// If session variable is not set it will redirect to login page
-if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
-  echo "<script> location.href='demo-video-background-login.php'; </script>";
-  exit;
-}
-?>
- 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Welcome</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
-    <style type="text/css">
-        body{ font: 14px sans-serif; text-align: center; color:white }
-    </style>
-</head>
-<body>
-    <div class="page-header">
+             
+            <div class="page-header">
         <h1>Hi, <b><?php echo $_SESSION['username']; ?></b>. Welcome to our site.</h1>
     </div>
-    <p><a href="demo-video-background-logout.php" class="btn btn-danger">Sign Out of Your Account</a></p>
-</body>
-</html>
+    <p><a href="logout.php" class="btn btn-danger">Sign Out of Your Account</a></p>
+
+               <div class="row">
+                    <div class="col-md-4 col-md-offset-4 col-sm6-6 col-sm-offset-3 ">
+                        <form class="form-inline" role="form">
+                          <div class="form-group">
+                            <label class="sr-only" for="exampleInputEmail2">Email address</label>
+                            <input type="email" class="form-control transparent" placeholder="Enter Email here for Weekly News">
+                          </div>
+                          <button type="submit" class="btn btn-warning btn-fill">Sign up</button>
+                        </form>
 
                     </div>
                 </div>
@@ -144,7 +148,7 @@ if(!isset($_SESSION['username']) || empty($_SESSION['username'])){
              Made with <i class="fa fa-heart heart"></i> by <a href="http://www.creative-tim.com">Group Name</a>. CIS491.01</a>
       </div>
     </div>
- </div>
+ 
 </body>
    <script src="js/jquery-1.10.2.js" type="text/javascript"></script>
 	<script src="js/bootstrap.min.js" type="text/javascript"></script>
